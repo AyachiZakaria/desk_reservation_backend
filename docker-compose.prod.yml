@@ -1,0 +1,22 @@
+# Production Docker Compose Override
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+version: '3.8'
+
+services:
+  desk-service:
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      # Override with actual production MongoDB URI
+      MONGODB_URI: ${MONGODB_URI}
+      MONGODB_DATABASE: ${MONGODB_DATABASE}
+      SECURITY_USERNAME: ${SECURITY_USERNAME}
+      SECURITY_PASSWORD: ${SECURITY_PASSWORD}
+      SERVER_PORT: 8080
+    # Remove local MongoDB dependency in production
+    depends_on: []
+
+  # Remove MongoDB service in production (using Atlas)
+  mongodb:
+    profiles:
+      - dev-only
